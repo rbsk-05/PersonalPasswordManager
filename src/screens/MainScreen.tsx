@@ -51,8 +51,8 @@ export default function MainScreen({ pin, navigation, route }: MainScreenProps) 
   };
 
   const handleSaveEdit = async () => {
-    if (!editService || !editUsername || !editPasswordValue) {
-      Alert.alert('Error', 'Please fill all fields');
+    if (!editPasswordValue) {
+      Alert.alert('Error', 'Password field is required');
       return;
     }
 
@@ -89,29 +89,32 @@ export default function MainScreen({ pin, navigation, route }: MainScreenProps) 
 
   const renderPasswordItem = ({ item }: { item: PasswordEntry }) => (
     <View style={styles.passwordCard}>
-      <View style={styles.cardContent}>
-        <Text style={styles.serviceName}>{item.service}</Text>
-        <Text style={styles.username}>{item.username}</Text>
-      </View>
-      <View style={styles.actions}>
-        <TouchableOpacity
-          style={styles.copyButton}
-          onPress={() => handleCopyPassword(item.password)}
-        >
-          <Text style={styles.buttonText}>Copy</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.editButton}
-          onPress={() => handleEditPassword(item)}
-        >
-          <Text style={styles.buttonText}>Edit</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.deleteButton}
-          onPress={() => handleDeletePassword(item.id)}
-        >
-          <Text style={styles.buttonText}>Delete</Text>
-        </TouchableOpacity>
+      <View style={styles.cardRow}>
+        <View style={styles.cardContent}>
+          {item.service && <Text style={styles.serviceName}>{item.service}</Text>}
+          {item.username && <Text style={styles.username}>{item.username}</Text>}
+          <Text style={styles.passwordText}>{item.password}</Text>
+        </View>
+        <View style={styles.actions}>
+          <TouchableOpacity
+            style={styles.copyButton}
+            onPress={() => handleCopyPassword(item.password)}
+          >
+            <Text style={styles.actionButtonText}>Copy</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => handleEditPassword(item)}
+          >
+            <Text style={styles.actionButtonText}>Edit</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.deleteButton}
+            onPress={() => handleDeletePassword(item.id)}
+          >
+            <Text style={styles.actionButtonText}>Delete</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -215,11 +218,17 @@ const styles = StyleSheet.create({
     borderLeftWidth: 3,
     borderLeftColor: '#FCC934',
   },
+  cardRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   cardContent: {
-    marginBottom: 12,
+    flex: 1,
+    marginRight: 12,
   },
   serviceName: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#e8eaed',
     marginBottom: 4,
@@ -227,28 +236,46 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 14,
     color: '#9aa0a6',
+    marginBottom: 4,
+  },
+  passwordText: {
+    fontSize: 14,
+    color: '#FCC934',
+    fontFamily: 'monospace',
   },
   actions: {
-    flexDirection: 'row',
-    gap: 10,
+    flexDirection: 'column',
+    gap: 6,
+    alignItems: 'flex-end',
   },
   copyButton: {
-    backgroundColor: '#FCC934',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    backgroundColor: '#3c4043',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     borderRadius: 6,
+    minWidth: 60,
+    alignItems: 'center',
   },
   editButton: {
     backgroundColor: '#5f6368',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     borderRadius: 6,
+    minWidth: 60,
+    alignItems: 'center',
   },
   deleteButton: {
     backgroundColor: '#5f6368',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     borderRadius: 6,
+    minWidth: 60,
+    alignItems: 'center',
+  },
+  actionButtonText: {
+    color: '#e8eaed',
+    fontWeight: 'bold',
+    fontSize: 12,
   },
   buttonText: {
     color: '#202124',
