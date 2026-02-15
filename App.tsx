@@ -16,12 +16,12 @@ function MainTabs({ pin }: { pin: string }) {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: '#16213e',
-          borderTopColor: '#0f3460',
-          borderTopWidth: 2,
+          backgroundColor: '#292A2D',
+          borderTopColor: '#3c4043',
+          borderTopWidth: 1,
         },
-        tabBarActiveTintColor: '#e94560',
-        tabBarInactiveTintColor: '#777',
+        tabBarActiveTintColor: '#FCC934',
+        tabBarInactiveTintColor: '#9aa0a6',
       }}
     >
       <Tab.Screen name="Passwords">

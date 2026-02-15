@@ -6,9 +6,10 @@ import { savePin, deletePin } from '../utils/secureStore';
 interface ProfileScreenProps {
   pin: string;
   onPinChanged: () => void;
+  navigation?: any;
 }
 
-export default function ProfileScreen({ pin, onPinChanged }: ProfileScreenProps) {
+export default function ProfileScreen({ pin, onPinChanged, navigation }: ProfileScreenProps) {
   const [service, setService] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -21,11 +22,21 @@ export default function ProfileScreen({ pin, onPinChanged }: ProfileScreenProps)
       return;
     }
 
-    await addPassword({ service, username, password }, pin);
-    Alert.alert('Success', 'Password added successfully');
-    setService('');
-    setUsername('');
-    setPassword('');
+    try {
+      await addPassword({ service, username, password }, pin);
+      Alert.alert('Success', 'Password added successfully');
+      setService('');
+      setUsername('');
+      setPassword('');
+
+      // Trigger refresh on main screen
+      if (navigation) {
+        navigation.navigate('Passwords', { refresh: Date.now() });
+      }
+    } catch (error) {
+      console.error('Error adding password:', error);
+      Alert.alert('Error', 'Failed to add password. Please try again.');
+    }
   };
 
   const handleChangePin = async () => {
@@ -116,7 +127,7 @@ export default function ProfileScreen({ pin, onPinChanged }: ProfileScreenProps)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: '#202124',
     paddingTop: 60,
   },
   section: {
@@ -126,29 +137,29 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#eee',
+    color: '#e8eaed',
     marginBottom: 20,
   },
   input: {
-    backgroundColor: '#16213e',
-    borderRadius: 12,
+    backgroundColor: '#292A2D',
+    borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 16,
-    color: '#eee',
+    color: '#e8eaed',
     marginBottom: 12,
-    borderWidth: 2,
-    borderColor: '#0f3460',
+    borderWidth: 1,
+    borderColor: '#3c4043',
   },
   button: {
-    backgroundColor: '#e94560',
-    borderRadius: 12,
+    backgroundColor: '#FCC934',
+    borderRadius: 8,
     paddingVertical: 14,
     alignItems: 'center',
     marginTop: 8,
   },
   buttonText: {
-    color: '#fff',
+    color: '#202124',
     fontSize: 16,
     fontWeight: 'bold',
   },

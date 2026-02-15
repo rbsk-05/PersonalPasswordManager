@@ -6,9 +6,10 @@ import { loadPasswords, deletePassword, PasswordEntry } from '../utils/passwordS
 interface MainScreenProps {
   pin: string;
   navigation: any;
+  route?: any;
 }
 
-export default function MainScreen({ pin, navigation }: MainScreenProps) {
+export default function MainScreen({ pin, navigation, route }: MainScreenProps) {
   const [passwords, setPasswords] = useState<PasswordEntry[]>([]);
 
   useEffect(() => {
@@ -21,6 +22,12 @@ export default function MainScreen({ pin, navigation }: MainScreenProps) {
     });
     return unsubscribe;
   }, [navigation]);
+
+  useEffect(() => {
+    if (route?.params?.refresh) {
+      loadPasswordData();
+    }
+  }, [route?.params?.refresh]);
 
   const loadPasswordData = async () => {
     const data = await loadPasswords(pin);
@@ -97,13 +104,13 @@ export default function MainScreen({ pin, navigation }: MainScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: '#202124',
     paddingTop: 60,
   },
   header: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#eee',
+    color: '#e8eaed',
     marginBottom: 20,
     paddingHorizontal: 20,
   },
@@ -111,12 +118,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   passwordCard: {
-    backgroundColor: '#16213e',
-    borderRadius: 12,
+    backgroundColor: '#292A2D',
+    borderRadius: 8,
     padding: 16,
     marginBottom: 12,
-    borderLeftWidth: 4,
-    borderLeftColor: '#e94560',
+    borderLeftWidth: 3,
+    borderLeftColor: '#FCC934',
   },
   cardContent: {
     marginBottom: 12,
@@ -124,31 +131,31 @@ const styles = StyleSheet.create({
   serviceName: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#eee',
+    color: '#e8eaed',
     marginBottom: 4,
   },
   username: {
     fontSize: 14,
-    color: '#aaa',
+    color: '#9aa0a6',
   },
   actions: {
     flexDirection: 'row',
     gap: 10,
   },
   copyButton: {
-    backgroundColor: '#0f3460',
+    backgroundColor: '#FCC934',
     paddingVertical: 8,
     paddingHorizontal: 16,
-    borderRadius: 8,
+    borderRadius: 6,
   },
   deleteButton: {
-    backgroundColor: '#e94560',
+    backgroundColor: '#5f6368',
     paddingVertical: 8,
     paddingHorizontal: 16,
-    borderRadius: 8,
+    borderRadius: 6,
   },
   buttonText: {
-    color: '#fff',
+    color: '#202124',
     fontWeight: 'bold',
   },
   emptyContainer: {
@@ -158,11 +165,11 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 18,
-    color: '#aaa',
+    color: '#9aa0a6',
     marginBottom: 8,
   },
   emptySubtext: {
     fontSize: 14,
-    color: '#777',
+    color: '#5f6368',
   },
 });
