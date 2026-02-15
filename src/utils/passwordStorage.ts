@@ -1,4 +1,3 @@
-import * as Crypto from 'expo-crypto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PASSWORDS_KEY = 'encrypted_passwords';
@@ -10,20 +9,28 @@ export interface PasswordEntry {
   password: string;
 }
 
-// Simple XOR encryption (for demonstration - you could use a more robust method)
+// Base64 encoding/decoding for React Native
+const base64Encode = (str: string): string => {
+  return btoa(unescape(encodeURIComponent(str)));
+};
+
+const base64Decode = (str: string): string => {
+  return decodeURIComponent(escape(atob(str)));
+};
+
+// XOR encryption without Buffer
 const encryptData = (data: string, key: string): string => {
-  const keyHash = Array.from(key).reduce((acc, char) => acc + char.charCodeAt(0), 0);
   const encrypted = Array.from(data)
     .map((char, i) => {
       const keyChar = key.charCodeAt(i % key.length);
       return String.fromCharCode(char.charCodeAt(0) ^ keyChar);
     })
     .join('');
-  return Buffer.from(encrypted).toString('base64');
+  return base64Encode(encrypted);
 };
 
 const decryptData = (encryptedData: string, key: string): string => {
-  const encrypted = Buffer.from(encryptedData, 'base64').toString();
+  const encrypted = base64Decode(encryptedData);
   const decrypted = Array.from(encrypted)
     .map((char, i) => {
       const keyChar = key.charCodeAt(i % key.length);
@@ -60,6 +67,15 @@ export const addPassword = async (entry: Omit<PasswordEntry, 'id'>, pin: string)
   };
   passwords.push(newEntry);
   await savePasswords(passwords, pin);
+};
+
+export const updatePassword = async (id: string, entry: Omit<PasswordEntry, 'id'>, pin: string) => {
+  const passwords = await loadPasswords(pin);
+  const index = passwords.findIndex(p => p.id === id);
+  if (index !== -1) {
+    passwords[index] = { ...entry, id };
+    await savePasswords(passwords, pin);
+  }
 };
 
 export const deletePassword = async (id: string, pin: string) => {
