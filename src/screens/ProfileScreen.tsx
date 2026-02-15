@@ -17,8 +17,8 @@ export default function ProfileScreen({ pin, onPinChanged, navigation }: Profile
   const [confirmNewPin, setConfirmNewPin] = useState('');
 
   const handleAddPassword = async () => {
-    if (!service || !username || !password) {
-      Alert.alert('Error', 'Please fill all fields');
+    if (!password) {
+      Alert.alert('Error', 'Password field is required');
       return;
     }
 
@@ -65,7 +65,7 @@ export default function ProfileScreen({ pin, onPinChanged, navigation }: Profile
           style={styles.input}
           value={service}
           onChangeText={setService}
-          placeholder="Service (e.g., Gmail, Facebook)"
+          placeholder="Service (optional)"
           placeholderTextColor="#777"
         />
 
@@ -73,7 +73,7 @@ export default function ProfileScreen({ pin, onPinChanged, navigation }: Profile
           style={styles.input}
           value={username}
           onChangeText={setUsername}
-          placeholder="Username or Email"
+          placeholder="Username or Email (optional)"
           placeholderTextColor="#777"
         />
 
@@ -81,7 +81,7 @@ export default function ProfileScreen({ pin, onPinChanged, navigation }: Profile
           style={styles.input}
           value={password}
           onChangeText={setPassword}
-          placeholder="Password"
+          placeholder="Password (required)"
           placeholderTextColor="#777"
           secureTextEntry
         />
